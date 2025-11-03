@@ -99,7 +99,31 @@ int buildEncodingTree(int nextFree) {
     //    - Set left/right pointers
     //    - Push new parent index back into the heap
     // 4. Return the index of the last remaining node (root)
-    return -1; // placeholder
+
+    if (nextFree <= 0) return -1;
+    if (nextFree == 1) return 0;
+
+    MinHeap heap;
+
+    for (int i = 0; i < nextFree; ++i) {
+        heap.push(i, weightArr);
+    }
+
+    while (heap.size > 1) {
+        int left = heap.pop(weightArr);
+        int right = heap.pop(weightArr);
+
+        int parent = nextFree;
+        weightArr[parent] = weightArr[left] + weightArr[right];
+        leftArr[parent] = left;
+        rightArr[parent] = right;
+        charArr[parent] = '*';
+
+        heap.push(parent, weightArr);
+        ++nextFree;
+    }
+
+    return heap.pop(weightArr);
 }
 
 // Step 4: Use an STL stack to generate codes
@@ -108,6 +132,37 @@ void generateCodes(int root, string codes[]) {
     // Use stack<pair<int, string>> to simulate DFS traversal.
     // Left edge adds '0', right edge adds '1'.
     // Record code when a leaf node is reached.
+
+    if (root < 0) return;
+
+    stack<pair<int, string>> st;
+    st.push({root, ""});
+
+    while (!st.empty()) {
+        int node = st.top().first;
+        string code = st.top().second;
+        st.pop();
+
+        if (leftArr[node] == -1 && rightArr[node] == -1) {
+            char ch = charArr[node];
+            if (ch >= 'a' && ch <= 'z') {
+                codes[ch - 'a'] = code;
+            }
+        }
+        else {
+
+            if (rightArr[node] != -1) {
+                st.push({rightArr[node], code + "1"});
+            }
+
+            if (leftArr[node] != -1) {
+                st.push({leftArr[node], code + "0"});
+            }
+
+        }
+    }
+
+    cout << "Code generated successfully.\n";
 }
 
 // Step 5: Print table and encoded message
