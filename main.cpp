@@ -1,7 +1,8 @@
 //
 // Created by Manju Muralidharan on 10/19/25.
-// Modified by Chris Palomares on 10/24/25
+// Originally Modified by Chris Palomares on 10/24/25
 //
+
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -90,25 +91,19 @@ int createLeafNodes(int freq[]) {
 
 // Step 3: Build the encoding tree using heap operations
 int buildEncodingTree(int nextFree) {
-    // TODO:
-    // 1. Create a MinHeap object.
-    // 2. Push all leaf node indices into the heap.
-    // 3. While the heap size is greater than 1:
-    //    - Pop two smallest nodes
-    //    - Create a new parent node with combined weight
-    //    - Set left/right pointers
-    //    - Push new parent index back into the heap
-    // 4. Return the index of the last remaining node (root)
 
+    // checks for empty or single nodes. If empty becomes root
     if (nextFree <= 0) return -1;
     if (nextFree == 1) return 0;
 
     MinHeap heap;
 
+    // push all leaf node into heap
     for (int i = 0; i < nextFree; ++i) {
         heap.push(i, weightArr);
     }
 
+    // Combine two smallest node until one root remains
     while (heap.size > 1) {
         int left = heap.pop(weightArr);
         int right = heap.pop(weightArr);
@@ -128,13 +123,10 @@ int buildEncodingTree(int nextFree) {
 
 // Step 4: Use an STL stack to generate codes
 void generateCodes(int root, string codes[]) {
-    // TODO:
-    // Use stack<pair<int, string>> to simulate DFS traversal.
-    // Left edge adds '0', right edge adds '1'.
-    // Record code when a leaf node is reached.
 
     if (root < 0) return;
 
+    // Starts at root
     stack<pair<int, string>> st;
     st.push({root, ""});
 
@@ -143,6 +135,7 @@ void generateCodes(int root, string codes[]) {
         string code = st.top().second;
         st.pop();
 
+        // Leaf node stores code for its character
         if (leftArr[node] == -1 && rightArr[node] == -1) {
             char ch = charArr[node];
             if (ch >= 'a' && ch <= 'z') {
@@ -151,6 +144,7 @@ void generateCodes(int root, string codes[]) {
         }
         else {
 
+            // Push right child and left
             if (rightArr[node] != -1) {
                 st.push({rightArr[node], code + "1"});
             }
@@ -167,7 +161,7 @@ void generateCodes(int root, string codes[]) {
 
 // Step 5: Print table and encoded message
 void encodeMessage(const string& filename, string codes[]) {
-    cout << "\nCharacter : Code\n";
+    cout << "\nCharacter : code\n";
     for (int i = 0; i < 26; ++i) {
         if (!codes[i].empty())
             cout << char('a' + i) << " : " << codes[i] << "\n";

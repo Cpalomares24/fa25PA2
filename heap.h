@@ -1,6 +1,6 @@
 //
 // Created by Manju Muralidharan on 10/19/25.
-// Modified by Chris Palomares on 10/24/25
+// Originally modified by Chris Palomares on 10/24/25
 //
 
 #ifndef HEAP_H
@@ -10,9 +10,13 @@
 using namespace std;
 
 struct MinHeap {
+
+    // array to store node
+    // current number of elements in the heap
     int data[64];
     int size;
 
+    // Constructor initalizes empty heap
     MinHeap() { size = 0; }
 
     void push(int idx, int weightArr[]) {

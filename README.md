@@ -1,5 +1,9 @@
 # CipherText: Variable-Bit (Frequency-Based) Encoding
 
+- Student: Chris Palomares
+- Course: CS210 Data Structures
+- Date: November 3, 2025
+
 ## Submission Details
 
 For this programming assignment, you will create your own **public GitHub repository**.  
